@@ -1,6 +1,5 @@
 import java.net.*;
 import java.io.*;
-import java.util.Scanner;
 
 public class UDPEscravo{
     public static void main(String[] args){
@@ -18,6 +17,7 @@ public class UDPEscravo{
                 ip = InetAddress.getByName("127.0.0.1");
             }
             int myport = Integer.parseInt(args[0]) + 5000;
+            int id = Integer.parseInt(args[0]);
             int sendPort = myport + 1;
             if (sendPort == 5004){
                 sendPort = 5000;
@@ -25,20 +25,26 @@ public class UDPEscravo{
             int operation = Integer.parseInt(args[1]);
             int turns =  Integer.parseInt(args[2]);
             int token = 0;
+            int tokenReceived = 0;
 
             asocket = new DatagramSocket();
             bsocket = new DatagramSocket(myport);
+
+            System.out.println("+-------------------------------------------------------------------------+");
+            System.out.println("|                               TOKEN RING                                |");
+            System.out.println("+--------------+--------------------+-------------------+-----------------+");
+            System.out.printf("| %-12s | %-18s | %-17s | %-15s |%n", "Escravo", "Token Recebido", "Token Enviado", "Volta");
+            System.out.println("+--------------+--------------------+-------------------+-----------------+");
 
             for(int i = 0; i < turns ; i++){
 
                 // recebimento de mensagem
                 byte[] buffer = new byte[1000];
                 DatagramPacket request2 = new DatagramPacket(buffer,buffer.length);
-                System.out.println("esperando mensagem");
                 bsocket.receive(request2);
                 String data = new String(request2.getData()).trim();
                 token = Integer.parseInt(data);
-                System.out.println("token recebido, valor atual: " + token);
+                tokenReceived = token;
                 if (operation == 1){
                     token *= 2;
                 }
@@ -49,10 +55,13 @@ public class UDPEscravo{
                 // envio de mensagem 
                 byte[] msg = String.valueOf(token).getBytes();
                 DatagramPacket request = new DatagramPacket (msg,msg.length,ip,sendPort);
-                System.out.println("Enviando token, valor atual: " + token);
                 asocket.send(request);
 
+                System.out.printf("| %-12s | %-18d | %-17d | %-15d |%n", "Escravo " + id, tokenReceived, token, (i + 1));
+
             }
+
+            System.out.println("+--------------+--------------------+-------------------+-----------------+");
 
         }catch(SocketException e){
             System.out.println("socket: " + e.getMessage());
