@@ -146,7 +146,37 @@ Resultado esperado no Mestre: `10`.
 
 ## 7. Execução distribuída em computadores diferentes
 
-Todos os computadores devem estar na mesma rede e aceitar UDP nas portas `5000` a `5003`. Configure o firewall antes dos testes.
+Todos os computadores devem estar na mesma rede e aceitar UDP nas portas `5000` a `5003`.
+
+### Comandos para liberar as portas no linux
+
+### Liberar as portas UDP de 5000 até 5003
+
+``` bash
+sudo ufw allow 5000:5003/udp
+```
+
+### Verificar as regras configuradas
+
+```bash
+sudo ufw status
+```
+
+### Comandos para liberar as portas no windows
+
+### ! Execute o power shell como administrador 
+
+### Liberar as portas UDP de 5000 até 5003
+```bash
+New-NetFirewallRule -DisplayName "Token Ring UDP" -Direction Inbound -Protocol UDP -LocalPort 5000-5003 -Action Allow
+```
+
+### Verificar a regra criada
+
+```bash
+Get-NetFirewallRule -DisplayName "Token Ring UDP"
+```
+### Exemplo de execução em máquinas diferentes
 
 ```bash
 # Máquina do Escravo 1: próximo nó é o Escravo 2

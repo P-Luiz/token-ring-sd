@@ -25,6 +25,7 @@ public class UDPMestre{
             int operation = Integer.parseInt(args[1]);
             int turns =  Integer.parseInt(args[2]);
             int token = 2;
+            int i = 0;
             String tokenReceived = "-";
 
             asocket = new DatagramSocket();
@@ -35,10 +36,9 @@ public class UDPMestre{
             System.out.println("+--------------+--------------------+-------------------+-----------------+");
             System.out.printf("| %-12s | %-18s | %-17s | %-15s |%n", "Nó", "Token Recebido", "Token Enviado", "Volta");
             System.out.println("+--------------+--------------------+-------------------+-----------------+");
+            System.out.printf("| %-12s | %-18s | %-17d | %-15d |%n", "Mestre " + id, tokenReceived , token, (i + 1));
 
-            for(int i = 0; i < turns ; i++){
-
-                System.out.printf("| %-12s | %-18s | %-17d | %-15d |%n", "Mestre " + id, tokenReceived , token, (i + 1));
+            for( i = 0; i < turns ; i++){
 
                 // envio de mensagem 
                 byte[] msg = String.valueOf(token).getBytes();
@@ -58,6 +58,8 @@ public class UDPMestre{
                 else{
                     token ++;
                 }
+
+                System.out.printf("| %-12s | %-18s | %-17d | %-15d |%n", "Mestre " + id, tokenReceived , token, (i + 1));
 
             }
             
